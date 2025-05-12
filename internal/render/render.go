@@ -8,8 +8,8 @@ import (
 	"net/http"
 	"path/filepath"
 
-	"github.com/alexpereap/go-bookings/pkg/config"
-	"github.com/alexpereap/go-bookings/pkg/models"
+	"github.com/alexpereap/go-bookings/internal/config"
+	"github.com/alexpereap/go-bookings/internal/models"
 	"github.com/justinas/nosurf"
 )
 

@@ -1,12 +1,14 @@
 package handlers
 
 import (
+	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 
-	"github.com/alexpereap/go-bookings/pkg/config"
-	"github.com/alexpereap/go-bookings/pkg/models"
-	"github.com/alexpereap/go-bookings/pkg/render"
+	"github.com/alexpereap/go-bookings/internal/config"
+	"github.com/alexpereap/go-bookings/internal/models"
+	"github.com/alexpereap/go-bookings/internal/render"
 )
 
 // Repo the repository used by the handlers
@@ -79,7 +81,28 @@ func (m *Repository) PostAvailability(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(fmt.Sprintf("start date is %s and end date is %s", start, end)))
 }
 
+type jsonResponse struct {
+	OK      bool   `json:"ok"`
+	Message string `json:"message"`
+}
+
 // Contact renders the contact page
 func (m *Repository) Contact(w http.ResponseWriter, r *http.Request) {
 	render.RenderTemplate(w, r, "contact.page.tmpl", &models.TemplateData{})
+}
+
+// AvailabilityJson handles request for availability and send JSON response
+func (m *Repository) AvailabilityJson(w http.ResponseWriter, r *http.Request) {
+	resp := jsonResponse{
+		OK:      true,
+		Message: "Available!",
+	}
+
+	out, err := json.MarshalIndent(resp, "", "    ")
+	if err != nil {
+		log.Println(err)
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(out)
 }
